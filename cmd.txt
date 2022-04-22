@@ -1,0 +1,77 @@
+sqlplus
+system
+kosta비번
+show user
+CREATE USER test IDENTIFIED BY test;
+
+connn test/test <- 오류
+
+con system/kosta <- 다시 관리자계정으로들어감(여기선 코스타)
+
+관한부여해줘야함 test는.
+GRANT CREATE SESSION to test;
+
+conn test/test
+
+craeate table test<a number>; <= 권한없다고 오류
+
+
+하나씩 권한줘야하니 한꺼번에 권한을 묶어둔 roll이있음.
+롤을 부여하면 각각의 권한이 해당계정에 다할당.
+
+conn syst/kosta
+GRANT CONNECT, RESOURCE to test;
+
+conn test/test
+CREATE TABLE test(a number); <- test 테이블생성
+DROP TABLE test <- 테이블제거
+
+CREATE TABLE custmoer(
+id VARCHAR2(10) <- 아이디 10자리
+,pwd VARCHAR2(10)
+)
+;
+
+INSERT INTO customer(id, pwd) VALUES ('id1;, 'p1'); <- 한행추가
+
+INSERT INTO customer(id, pwd) VALUES ('id1;, 'NULL'); < - null값추가
+INSERT INTO customer(id, pwd) VALUES ('id1;, ' ');<-' ' 도 null값추가gksmsrjtdla. 
+SELECT * FROM customer; <- 확인
+
+INSERT INTO customer(id) VALUES ('id1'); <- 비번지정x null값들어감.
+
+SQL> CREATE TABLE a(
+  2  num NUMBER
+  3  ,num1 NUMBER(2) <- 2자리로 고정
+  4  ,num2 NUMBER(5,2) <- 5자리, 소수점. 2자리.
+  5 );
+
+INSERT INTO a(num, num1, num2) VALUES(12345, 12, 123.45);
+
+SQL> INSERT INTO a(num, num1, num2) VALUES(12345, 123, 123.456);
+INSERT INTO a(num, num1, num2) VALUES(12345, 123, 123.456);
+                                             *
+ERROR at line 1:
+ORA-01438: value larger than specified precision allowed for this column
+<- 자리수 범위가 넘어가서 에러남.
+
+VARCHARTR2() <_ 반드시 길이를 결정해줘야함.
+
+VALUE~~~ 자릿수문제.
+CHAR <- 길이지정안하면 1자리가 기본.
+NUMBER <- 길이지정안하면 최대지정x 최대자리수 표시.
+
+SQL> SELECT LENGTH(c), LENGTH(c1), LENGTH(c2) FROM b; <= b테이블의
+자리숫자확인.
+
+
+ LENGTH(C) LENGTH(C1) LENGTH(C2)
+---------- ---------- ----------
+         1          3          2
+
+CHAR <- 문자길이만큼확보
+VARCHAR2 <- 저장길이 만큼 확보.
+
+SQL> SELECT TO_CHAR(dt, 'YY/MM/DD HH24:MI:SS'), dt1 FROM c;
+
+========

@@ -1,0 +1,40 @@
+CREATE TABLE 사원(
+사번 varchar2(10) CONSTRAINT 사원_사번_pk PRIMARY KEY
+,이름 varchar2(2) NOT NULL
+,직무 ID varchar2(6)
+,주민번호 char(13) NOT NULL
+,급여 NUMBER(7) NOT NULL
+,CONSTRATER 사원_직무 ID_fk
+	FOREING KEY (직무 ID) REFERENCES 직무(직무ID)
+,CONSTRAINT 사원_주민번호_uq
+	UNIQUE (주민번호)
+, CONSTRAINT 사원_급여_ck
+	CHECK (급여 >=0)
+);
+
+INSERT INTO 직무(직무ID, 직무명) VALUES ('A", '인사업무');
+INSERT INTO 사원(사번, 이름, 직무ID, 급여)
+VALUES ('s1', 'n1', 'A', 1000);
+
+DELETE FROM 직무 WHERE 직무 ID = 'A' ; <- DELETE 삭제. ERROR 0
+<- 직무 아이디 a가 삭제되지 모하는데 사원쪽에서 직무테이블의 컬럼을 참조하고 있기때문에
+자식테이블에서 참조 하고 있기 때문에 부모테이블에서 제거 못함.
+
+--사원테이블생성시 
+,CONSTRATER 사원_직무 ID_fk
+	FOREING KEY (직무 ID) REFERENCES 직무(직무ID)
+	ON DELETE CASCADE <- 자식에다설정.부모테이블을 삭제할때 자식테이블의 자료도 같이
+삭제됨.
+
+DELETE FROM  직무 WHERE 직무 ID = 'A" ; --ok, 사원중 'a'직무담당 사원이 모두 삭제됨.
+
+--사원테이블생성시 
+,CONSTRATER 사원_직무 ID_fk
+	FOREING KEY (직무 ID) REFERENCES 직무(직무ID)
+	ON DELETE lET null;
+
+DELETE FROM  직무 WHERE 직무 ID = 'A" ; -ok, 사원중 'A' 직무담당 사원이 모두 NULL이됨.
+
+CREATE TABLE test(
+	a CHAR(1)
+	, CONSTRAINT test_a_ck CHECK (a IN ('C', 'S', 'W' ))
